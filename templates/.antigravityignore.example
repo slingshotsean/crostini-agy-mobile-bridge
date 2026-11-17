@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.venv/
+output/
+input/
+archive/
+*.pdf
+*.csv
+*.xlsx
+.git/
+.env

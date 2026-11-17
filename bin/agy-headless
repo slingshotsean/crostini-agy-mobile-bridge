@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export DISPLAY="${DISPLAY:-:0}"
+AGY_BIN="/opt/Antigravity/Antigravity-x64/antigravity"
+exec "$AGY_BIN" --ozone-platform=headless --disable-gpu --disable-software-rasterizer "$@"
