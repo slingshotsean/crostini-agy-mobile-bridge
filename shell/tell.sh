@@ -1,12 +1,13 @@
 export TELL_DRIVE_FILE="${TELL_DRIVE_FILE:-$HOME/GoogleDrive/LATEST_TERMINAL_TELEMETRY.txt}"
+export TELL_RING_FILE="${TELL_RING_FILE:-$HOME/.telemetry_ring.log}"
 tell() {
-  local out="$TELL_DRIVE_FILE"
-  mkdir -p "$(dirname "$out")"
+  mkdir -p "$(dirname "$TELL_DRIVE_FILE")"
   {
-    echo "=== CROSTINI MOBILE TELEMETRY ($(date -Iseconds)) ==="
-    git log -n 3 --oneline 2>/dev/null || true
-    [ -n "$1" ] && { echo ""; eval "$@" 2>&1; }
-  } > "$out"
+    echo "=== CYCLE ($(date -Iseconds)) | PWD: $(pwd) ==="
+    [ -n "$1" ] && { echo "CMD: $*"; eval "$@" 2>&1; }
+  } >> "$TELL_RING_FILE"
+  tail -n 200 "$TELL_RING_FILE" > "${TELL_RING_FILE}.tmp" && mv "${TELL_RING_FILE}.tmp" "$TELL_RING_FILE"
+  cat "$TELL_RING_FILE" > "$TELL_DRIVE_FILE"
   sync
-  echo "Telemetry synced -> $out"
+  echo "Rolling telemetry synced -> $TELL_DRIVE_FILE"
 }
